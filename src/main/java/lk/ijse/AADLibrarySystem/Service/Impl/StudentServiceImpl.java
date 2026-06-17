@@ -1,8 +1,10 @@
 package lk.ijse.AADLibrarySystem.Service.Impl;
 
 import lk.ijse.AADLibrarySystem.DTO.StudentDTO;
+import lk.ijse.AADLibrarySystem.Entity.Section;
 import lk.ijse.AADLibrarySystem.Entity.Student;
 import lk.ijse.AADLibrarySystem.Enumaration.StudentStatus;
+import lk.ijse.AADLibrarySystem.Repositoy.SectionRepository;
 import lk.ijse.AADLibrarySystem.Repositoy.StudentRepository;
 import lk.ijse.AADLibrarySystem.Service.StudentService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +19,12 @@ import java.util.Optional;
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
+    private final SectionRepository sectionRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
+
+    public StudentServiceImpl(StudentRepository studentRepository, SectionRepository sectionRepository) {
         this.studentRepository = studentRepository;
+        this.sectionRepository = sectionRepository;
     }
 
     @Override
@@ -124,7 +129,58 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(long id) {
+    public StudentDTO deleteStudent(long id) {
+    log.info("StudentServiceImpl - deleteStudent() called");
+        try {
+            Optional<Student> optionalStudent = studentRepository.findById(id);
+            if (!optionalStudent.isPresent()) {
+                throw new RuntimeException("Student not found with ID: " + id);
+            }
+            Student student = optionalStudent.get();
+            student.setStatus(StudentStatus.INACTIVE);
 
+            Student deleteStudent = studentRepository.save(student);
+
+            StudentDTO responseDTO = new StudentDTO();
+            responseDTO.setStudentId(deleteStudent.getStudentId());
+            responseDTO.setStudentName(deleteStudent.getStudentName());
+            responseDTO.setDob(deleteStudent.getDob());
+            responseDTO.setStatus(deleteStudent.getStatus());
+
+            return responseDTO;
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public StudentDTO addStudentToSections(StudentDTO studentDTO, long sectionId) {
+        log.info("StudentServiceImpl - addStudentToSections() called with studentId: {} and sectionId: {}", studentDTO, sectionId);
+        try {
+            Optional<Student> optionalStudent = studentRepository.findById(studentDTO.getStudentId());
+            if (!optionalStudent.isPresent()) {
+                throw new RuntimeException("Student not found with ID: " + studentDTO.getStudentId());
+            }
+            Student student = optionalStudent.get();
+
+            Optional<Section> optionalSection = sectionRepository.findById(sectionId);
+            if (!optionalSection.isPresent()) {
+                throw new RuntimeException("Section not found with ID: " + sectionId);
+            }
+            Section section = optionalSection.get();
+            student.setSection(section);
+
+            Student saveToSection = studentRepository.save(student);
+            StudentDTO responseDTO = new StudentDTO();
+            responseDTO.setStudentId(saveToSection.getStudentId());
+            responseDTO.setStudentName(saveToSection.getStudentName());
+            responseDTO.setDob(saveToSection.getDob());
+            responseDTO.setStatus(saveToSection.getStatus());
+
+            return responseDTO;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

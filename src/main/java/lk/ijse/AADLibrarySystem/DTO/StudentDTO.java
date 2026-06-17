@@ -16,6 +16,7 @@ public class StudentDTO {
     private String studentName;
     private LocalDate dob;
     private StudentStatus status;
+    private long sectionId;
 
     public StudentDTO(String studentName, LocalDate dob) {
         this.studentName = studentName;

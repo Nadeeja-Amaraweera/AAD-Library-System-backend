@@ -15,5 +15,7 @@ public interface StudentService {
 
     List<StudentDTO> getAllStudents();
 
-    void deleteStudent(long id);
+    StudentDTO deleteStudent(long id);
+
+    StudentDTO addStudentToSections(StudentDTO studentDTO, long sectionId);
 }

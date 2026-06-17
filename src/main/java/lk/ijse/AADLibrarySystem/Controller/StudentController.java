@@ -57,8 +57,15 @@ public class StudentController {
     @DeleteMapping(value = "/delete/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResponse deleteStudent(@PathVariable long id) {
         log.info("SectionController - deleteStudent() called with ID: {}", id);
-        studentService.deleteStudent(id);
-        return new CommonResponse(OPERATION_SUCCESS, null, SUCCESS_MESSAGE);
+        StudentDTO studentDTO = studentService.deleteStudent(id);
+        return new CommonResponse(OPERATION_SUCCESS, studentDTO, SUCCESS_MESSAGE);
+    }
+
+    @PatchMapping(value = "/addToSection/{sectionId}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse addStudentToSection(@RequestBody StudentDTO studentDTO, @PathVariable long sectionId) {
+        log.info("SectionController - addStudentToSection() called with studentId: {} and sectionId: {}", studentDTO, sectionId);
+        StudentDTO studentDTO1 = studentService.addStudentToSections(studentDTO, sectionId);
+        return new CommonResponse(OPERATION_SUCCESS, studentDTO1, SUCCESS_MESSAGE);
     }
 
 }
