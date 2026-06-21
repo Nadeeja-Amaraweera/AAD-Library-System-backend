@@ -1,6 +1,5 @@
-package lk.ijse.AADLibrarySystem.Entity;
+package lk.ijse.AADLibrarySystem.DTO;
 
-import jakarta.persistence.*;
 import lk.ijse.AADLibrarySystem.Enumaration.BookStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,25 +8,16 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Record {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor
+public class RecordDTO {
     private long recordId;
-
-    @ManyToOne
-    private Student student;
-
-    @ManyToOne
-    private Book book;
-
+    private long studentId;
+    private String studentName;
+    private long bookId;
+    private String bookName;
     private LocalDate borrowDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
-
-    @Enumerated
     private BookStatus bookStatus;
-
 }
