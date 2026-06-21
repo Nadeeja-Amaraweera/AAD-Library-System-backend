@@ -67,7 +67,7 @@ public class RecordServiceImpl implements RecordService {
             record.setBook(book);
             record.setBorrowDate(LocalDate.now());
             record.setDueDate(LocalDate.now().plusWeeks(2));
-            record.setBookStatus(BookStatus.BORROWED);
+            record.setBookStatus(String.valueOf(BookStatus.BORROWED));
 
             Record saveRecord = recordRepository.save(record);
 

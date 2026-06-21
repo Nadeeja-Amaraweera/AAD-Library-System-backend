@@ -27,7 +27,6 @@ public class Record {
     private LocalDate dueDate;
     private LocalDate returnDate;
 
-    @Enumerated
-    private BookStatus bookStatus;
+    private String bookStatus;
 
 }
