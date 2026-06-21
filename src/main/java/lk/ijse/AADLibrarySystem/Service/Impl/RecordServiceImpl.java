@@ -82,7 +82,27 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public CommonResponse returnBook(ReturnRequestDTO returnRequest) {
-        return null;
+        log.info("RecordServiceImpl - returnBook() called with Student ID: {} and Book ID: {}", returnRequest.getRecordId());
+        try {
+            Optional<Record> optionalRecord = recordRepository.findById(returnRequest.getRecordId());
+            if (!optionalRecord.isPresent()) {
+                throw new RuntimeException("Record not found with ID: " + returnRequest.getRecordId());
+            }
+            Record record = optionalRecord.get();
+            if (record.getReturnDate() != null) {
+                return new CommonResponse(ResponseStatusCode.OPERATION_FAILED, "Book has already been returned.", null);
+            }
+
+            record.setReturnDate(LocalDate.now());
+            record.setBookStatus(String.valueOf(BookStatus.RETURNED));
+            Record updateRecord = recordRepository.save(record);
+
+            RecordDTO recordDTO = convertToDTO(updateRecord);
+
+            return new CommonResponse(ResponseStatusCode.OPERATION_SUCCESS, recordDTO, ResponseMessage.SUCCESS_MESSAGE);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     private RecordDTO convertToDTO(Record record){

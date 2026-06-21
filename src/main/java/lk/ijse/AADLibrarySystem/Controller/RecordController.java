@@ -2,13 +2,11 @@ package lk.ijse.AADLibrarySystem.Controller;
 
 import lk.ijse.AADLibrarySystem.Constant.CommonResponse;
 import lk.ijse.AADLibrarySystem.DTO.BorrowRequestDTO;
+import lk.ijse.AADLibrarySystem.DTO.ReturnRequestDTO;
 import lk.ijse.AADLibrarySystem.Service.Impl.RecordServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -24,5 +22,10 @@ public class RecordController {
     @PostMapping(value = "/borrow", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResponse borrowBook(@RequestBody BorrowRequestDTO borrowRequestDTO){
         return recordService.borrowBook(borrowRequestDTO);
+    }
+
+    @PatchMapping(value = "/return", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse returnBook(@RequestBody ReturnRequestDTO returnRequestDTO) {
+        return recordService.returnBook(returnRequestDTO);
     }
 }
