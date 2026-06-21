@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static lk.ijse.AADLibrarySystem.Constant.ResponseMessage.SUCCESS_MESSAGE;
 import static lk.ijse.AADLibrarySystem.Constant.ResponseStatusCode.OPERATION_SUCCESS;
 
@@ -32,4 +34,12 @@ public class BookController {
         BookDTO bookDTO1 = bookService.updateBook(bookDTO);
         return new CommonResponse(OPERATION_SUCCESS, bookDTO1, SUCCESS_MESSAGE);
     }
+
+    @GetMapping(value = "/getAll",produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResponse getAllBooks(){
+        List<BookDTO> bookDTOList = bookService.getAllBooks();
+        return new CommonResponse(OPERATION_SUCCESS,bookDTOList,SUCCESS_MESSAGE);
+    }
+
+
 }
